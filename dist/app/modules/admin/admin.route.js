@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AdminRoutes = void 0;
+const express_1 = __importDefault(require("express"));
+const admin_controller_1 = require("./admin.controller");
+const validateRequest_1 = __importDefault(require("../../middlewares/validateRequest"));
+const admin_validate_1 = require("./admin.validate");
+const auth_validate_1 = require("../auth/auth.validate");
+const user_1 = require("../../../enums/user");
+const admin_1 = __importDefault(require("../../middlewares/admin"));
+const router = express_1.default.Router();
+router.get('/my-profile', (0, admin_1.default)(user_1.ENUM_USER_ROLE.ADMIN), admin_controller_1.AdminController.getLoggedAdmin);
+router.patch('/my-profile', (0, admin_1.default)(user_1.ENUM_USER_ROLE.ADMIN), admin_controller_1.AdminController.updateLoggedAdmin);
+router.post('/create-admin', (0, validateRequest_1.default)(admin_validate_1.AdminValidation.createAdminZodSchema), admin_controller_1.AdminController.createAdmin);
+router.post('/login', (0, validateRequest_1.default)(admin_validate_1.AdminValidation.loginZodSchema), admin_controller_1.AdminController.loginAdmin);
+router.post('/refresh-token', (0, validateRequest_1.default)(auth_validate_1.AuthValidation.refreshTokenZodSchema), admin_controller_1.AdminController.refreshToken);
+exports.AdminRoutes = router;
